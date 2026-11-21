@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="bn"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free Play Button Link Maker</title>
+<meta name="description" content="ছবি দিয়ে নিজের Play Button Public Link তৈরি করুন।">
+<style>
+:root{color-scheme:dark;--bg:#0b1423;--panel:#142137;--line:#304561;--muted:#a9bad0;--green:#45dda0;--blue:#6baaf5}
+*{box-sizing:border-box}body{margin:0;padding:22px;background:var(--bg);color:#edf4ff;font:15px system-ui,"Noto Sans Bengali",sans-serif}.wrap{max-width:1040px;margin:auto}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:19px;margin-bottom:16px}h1{font-size:25px;margin:0 0 7px}h2{font-size:18px;margin:0 0 13px}.muted,.hint,.small{color:var(--muted);font-size:13px;line-height:1.7}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{display:block;font-size:13px;font-weight:700;margin:13px 0 7px}input,select{width:100%;padding:11px;border-radius:9px;border:1px solid #405674;background:#091525;color:white;font:inherit}input[type=color]{height:44px;padding:4px}input[type=file]{padding:9px}button{border:0;border-radius:10px;padding:12px 17px;font-weight:750;cursor:pointer;margin:12px 8px 0 0}.primary{background:var(--green);color:#082116}.secondary{background:var(--blue);color:#071a30}button:disabled{opacity:.5;cursor:not-allowed}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.preview{position:relative;aspect-ratio:16/9;background:#08111e;border:1px dashed #405573;border-radius:12px;overflow:hidden;display:grid;place-items:center;margin-top:12px}.preview img{width:100%;height:100%;object-fit:contain;display:none}.play{position:absolute;inset:0;display:none;align-items:center;justify-content:center}.play span{width:76px;height:76px;border-radius:50%;background:#fff;color:#17243a;display:grid;place-items:center;font-size:30px;padding-left:5px;box-shadow:0 4px 24px #0008}.empty{color:var(--muted);text-align:center;padding:20px}.result{display:none;margin-top:15px;padding:15px;border:1px solid #3e6471;border-radius:12px;overflow-wrap:anywhere;line-height:1.7;background:#0c1c2c}.result a{color:#9bc9ff}.url{font-weight:700;color:#78e5b5;word-break:break-all}.tip{padding:12px;border-left:3px solid var(--green);background:#0c1c2c;border-radius:8px;margin-top:14px}.badge{display:inline-block;border:1px solid #47617f;border-radius:20px;padding:3px 9px;font-size:12px;color:#c6d7ed;margin:4px 4px 0 0}.actions{display:flex;flex-wrap:wrap;gap:6px}.actions button{margin-right:0}hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+@media(max-width:760px){body{padding:11px}.grid{grid-template-columns:1fr}.play span{width:62px;height:62px;font-size:25px}}
+</style></head>
+<body><main class="wrap">
+<header class="panel"><h1>ছবির মাঝখানে গোল Play Button Link Maker</h1><div class="muted">ছবি Upload করো, নিজের লিংক ও Title দাও, তারপর এক ক্লিকেই Public Link তৈরি করো। ZIP, Extract বা Hosting Upload করতে হবে না।</div><span class="badge">Free Hosting Backend</span><span class="badge">Custom URL</span><span class="badge">Facebook Preview</span></header>
+<div class="grid">
+<section class="panel">
+<h2>১. ছবি ও লিংক তৈরি</h2>
+<label for="file">ছবি নির্বাচন করো</label><input id="file" type="file" accept="image/jpeg,image/png,image/webp">
+<div class="small">সর্বোচ্চ 10 MB ছবি। আপলোডের আগে Full HD JPEG-এ রূপান্তর হবে।</div>
+<label for="url">Destination URL</label><input id="url" type="url" placeholder="https://youtube.com/watch?v=...">
+<label for="title">ছবির নিচে Title</label><input id="title" maxlength="100" placeholder="যেমন: Full Action Movie">
+<label for="desc">Facebook / SEO Description</label><input id="desc" maxlength="180" placeholder="লিংক শেয়ার করলে যে বর্ণনা দেখাবে">
+<label for="slug">Custom Link Name</label><input id="slug" maxlength="32" placeholder="যেমন: my-movie-01">
+<div class="small">ইংরেজি অক্ষর, সংখ্যা ও hyphen ব্যবহার করো। উদাহরণ: my-movie-01</div>
+<hr><h2>২. ডিজাইন Customize</h2>
+<label for="ratio">ছবির অনুপাত</label><select id="ratio"><option value="16/9">16:9 Landscape</option><option value="1/1">1:1 Square</option><option value="4/5">4:5 Portrait</option><option value="9/16">9:16 Story / Reel</option></select>
+<div class="two"><div><label for="playColor">Play Button Color</label><input id="playColor" type="color" value="#ffffff"></div><div><label for="playSize">Button Size (px)</label><input id="playSize" type="number" min="42" max="150" value="76"></div><div><label for="titleColor">Title Color</label><input id="titleColor" type="color" value="#172033"></div><div><label for="titleSize">Title Font Size</label><input id="titleSize" type="number" min="12" max="44" value="22"></div></div>
+<label for="fit">Image Fit</label><select id="fit"><option value="contain">Contain — পুরো ছবি দেখা যাবে</option><option value="cover">Cover — জায়গা পূরণ করবে</option></select>
+<button class="primary" id="generate" disabled>Generate Link</button>
+<div id="status" class="small" role="status"></div>
+<div id="result" class="result" aria-live="polite"></div>
+<div class="tip hint">তৈরি হওয়া লিংক তোমার Netlify সাইটের অধীনে থাকবে। Facebook preview-তে ছবি, Title ও Description দেখানোর জন্য আলাদা image URL এবং OG metadata তৈরি হবে।</div>
+</section>
+<section class="panel">
+<h2>৩. Live Preview</h2>
+<div class="preview" id="preview"><div class="empty" id="empty">এখানে তোমার ছবি দেখা যাবে</div><img id="img" alt="ছবির Preview"><div class="play" id="play"><span id="playIcon">▶</span></div></div>
+<div id="previewTitle" style="display:none;text-align:center;margin-top:12px;font-weight:700;overflow-wrap:anywhere"></div>
+<p class="muted">Play Button ছবির ঠিক মাঝখানে থাকবে। Title ছবির নিচে দেখাবে।</p>
+<div class="tip hint"><b>ব্যবহারকারীর জন্য সহজ:</b><br>১. ছবি Upload<br>২. লিংক ও Title লিখুন<br>৩. Generate Link চাপুন<br>৪. Copy Link বা Facebook Share করুন।</div>
+</section></div>
+<footer class="small" style="text-align:center;padding:10px">Powered by HTML, CSS, JavaScript, Netlify Functions & Netlify Blobs.</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);let selectedFile=null;
+const dims={"16/9":[1920,1080],"1/1":[1080,1080],"4/5":[1080,1350],"9/16":[1080,1920]};
+function safeNum(id,min,max,def){return Math.max(min,Math.min(max,Number($(id).value)||def))}
+function slugify(s){return s.toLowerCase().trim().replace(/[^a-z0-9-]+/g,"-").replace(/-+/g,"-").replace(/^-|-$/g,"").slice(0,32)}
+function validUrl(){try{let u=new URL($("url").value.trim());return ["https:","http:"].includes(u.protocol)?u.href:""}catch{return ""}}
+function update(){
+ $("preview").style.aspectRatio=$("ratio").value;
+ $("playIcon").style.background=$("playColor").value;
+ let size=safeNum("playSize",42,150,76);$("playIcon").style.width=size+"px";$("playIcon").style.height=size+"px";
+ $("previewTitle").textContent=$("title").value.trim();$("previewTitle").style.display=$("title").value.trim()?"block":"none";
+ $("previewTitle").style.color=$("titleColor").value;$("previewTitle").style.fontSize=safeNum("titleSize",12,44,22)+"px";
+ $("img").style.objectFit=$("fit").value;
+ $("generate").disabled=!selectedFile;
+}
+$("file").addEventListener("change",()=>{let f=$("file").files[0];if(!f)return;if(!/^image\/(jpeg|png|webp)$/.test(f.type)){alert("JPG, PNG অথবা WebP ছবি নির্বাচন করো।");return}if(f.size>10*1024*1024){alert("ছবির সাইজ ১০ MB-এর মধ্যে রাখো।");return}selectedFile=f;let reader=new FileReader();reader.onload=()=>{$("img").src=reader.result;$("img").style.display="block";$("empty").style.display="none";$("play").style.display="flex";update()};reader.readAsDataURL(f)});
+["url","title","desc","slug","ratio","playColor","playSize","titleColor","titleSize","fit"].forEach(id=>$(id).addEventListener("input",update));
+function canvasImage(file){
+ return new Promise((resolve,reject)=>{let src=URL.createObjectURL(file),im=new Image();im.onload=()=>{let [w,h]=dims[$("ratio").value]||dims["16/9"],c=document.createElement("canvas");c.width=w;c.height=h;let x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,h);let scale=$("fit").value==="cover"?Math.max(w/im.width,h/im.height):Math.min(w/im.width,h/im.height),dw=im.width*scale,dh=im.height*scale;x.drawImage(im,(w-dw)/2,(h-dh)/2,dw,dh);URL.revokeObjectURL(src);c.toBlob(b=>b?resolve(b):reject(Error("ছবি প্রসেস করা যায়নি")),"image/jpeg",.9)};im.onerror=()=>reject(Error("ছবি পড়া যায়নি"));im.src=src})
+}
+$("generate").addEventListener("click",async()=>{
+ const btn=$("generate");let slug=slugify($("slug").value);
+ if(!selectedFile){alert("আগে ছবি Upload করো");return}
+ if(!validUrl()){alert("সঠিক Destination URL দাও (https://...)");return}
+ if(!slug||slug.length<3){alert("Custom Link Name কমপক্ষে ৩ অক্ষরের দাও");return}
+ btn.disabled=true;btn.textContent="তৈরি হচ্ছে...";$("status").textContent="ছবি প্রস্তুত করা হচ্ছে...";
+ try{
+  let blob=await canvasImage(selectedFile),form=new FormData();
+  form.append("image",blob,"preview.jpg");form.append("slug",slug);form.append("url",validUrl());
+  form.append("title",$("title").value.trim());form.append("description",$("desc").value.trim());
+  form.append("ratio",$("ratio").value);form.append("fit",$("fit").value);
+  form.append("playColor",$("playColor").value);form.append("playSize",String(safeNum("playSize",42,150,76)));
+  form.append("titleColor",$("titleColor").value);form.append("titleSize",String(safeNum("titleSize",12,44,22)));
+  $("status").textContent="Public Link তৈরি হচ্ছে...";
+  let response=await fetch("/api/create",{method:"POST",body:form});
+  let data=await response.json();if(!response.ok)throw Error(data.error||"লিংক তৈরি করা যায়নি");
+  $("result").style.display="block";
+  $("result").innerHTML="<b>তোমার Public Link তৈরি হয়েছে!</b><div class='url' id='madeUrl'></div><div class='actions'><button class='primary' id='copy'>Copy Link</button><button class='secondary' id='share'>Facebook Share</button></div><div class='small' style='margin-top:9px'>লিংকটি এখন অন্যদের পাঠাতে পারো। Facebook Preview দেখাতে crawler-কে প্রথমবার metadata পড়তে কয়েক মুহূর্ত লাগতে পারে।</div>";
+  $("madeUrl").textContent=data.url;
+  $("copy").onclick=async()=>{try{await navigator.clipboard.writeText(data.url);$("copy").textContent="Copied!"}catch{prompt("লিংক কপি করো:",data.url)}};
+  $("share").onclick=()=>window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(data.url),"_blank","noopener");
+  $("status").textContent="সম্পন্ন!";
+ }catch(e){$("status").textContent="";alert(e.message||"সমস্যা হয়েছে। আবার চেষ্টা করো")}
+ finally{btn.disabled=false;btn.textContent="Generate Link"}
+});
+update();
+</script></body></html>
